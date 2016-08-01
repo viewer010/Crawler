@@ -13,7 +13,6 @@ import sys
 reload(sys) 
 sys.setdefaultencoding('utf8')
 
-
 class UrllibCrawler(object):
 
     def __init__(self, headers = {},debug = True, p = ''):
