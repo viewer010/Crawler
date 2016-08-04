@@ -51,7 +51,7 @@ class RequestsCrawler(object):
     def get(self, url, paras = {}, html_flag = False):
         ret = ''
         try:
-            print url,
+            print 'get : '+url,
             req = requests.Request('GET', url,params=paras,headers=self.headers)
             prepped=self.s.prepare_request(req)
             r=self.s.send(prepped, proxies=self.proxies,allow_redirects=self._allow_redirects,verify=self._verify)
@@ -78,8 +78,9 @@ class RequestsCrawler(object):
                 ret = r.content
 
         except Exception, e:
-            print e
-            #traceback.print_exc()
+            if self.debug:
+                print e
+                #traceback.print_exc()
 
         return ret
 
@@ -88,7 +89,12 @@ class RequestsCrawler(object):
     def post(self, url, paras = {}, html_flag = False):
         ret = ''
         try:
-            print url,
+            print 'post : '+url
+            post_data=''
+            for i in  paras:
+                post_data+=i+'='+paras[i]+'&'
+            print post_data[0:-1]
+
             req = requests.Request('POST', url,data=paras,headers=self.headers)
             prepped=self.s.prepare_request(req)
             r=self.s.send(prepped, proxies=self.proxies,allow_redirects=self._allow_redirects,verify=self._verify)
@@ -115,8 +121,9 @@ class RequestsCrawler(object):
                 ret = r.content
 
         except Exception, e:
-            print e
-            #traceback.print_exc()
+            if self.debug:
+                print e
+                #traceback.print_exc()
 
         return ret
 
@@ -130,7 +137,7 @@ if __name__ == '__main__':
         }
         mc = RequestsCrawler(debug=False)
         mc.add_header(headers)
-        #mc.set_proxy('127.0.0.1:8080')
+        mc.set_proxy('127.0.0.1:8080')
         mc.set_debug(True)
         page1=mc.get('http://sep.ucas.ac.cn/',html_flag=True)
         #print page1

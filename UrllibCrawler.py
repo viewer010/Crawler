@@ -2,7 +2,7 @@
 #coding=utf-8
 
 '''
-    python爬虫 : 对urllib2封装
+    python爬虫 : urllib2
 '''
 import urllib
 import urllib2
@@ -48,9 +48,6 @@ class UrllibCrawler(object):
 
             self.opener.addheaders += [(key, headers[key]), ]
     
-    def set_debug(self, flag = True):
-        #self.debug = flag
-        pass
 
     def add_referer(self, referer):
         cur=self._replace('Referer')
@@ -65,9 +62,6 @@ class UrllibCrawler(object):
                 self.opener.addheaders.pop(cur)
             self.opener.addheaders += [(key, headers[key]), ]
 
-    def set_proxy(self, p):
-        pass
-        
     def _replace(self,key):
         cur=0
         for header in self.opener.addheaders:
@@ -116,19 +110,24 @@ if __name__ == '__main__':
         headers={
             'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0',
         }
-        mc = UrllibCrawler()
-
-        mc.add_header(headers=headers)
+        mc = UrllibCrawler(debug=True,p='127.0.0.1:8080')
+        mc.add_header(headers)
         
-        mc.add_referer('http://www.baidu.com')
-
-        page=mc.get('http://www.baidu.com/',html_flag=True)
-
-        print page
-     
+        page1=mc.get('http://sep.ucas.ac.cn/',html_flag=True)
+        #print page1
+        mc.add_referer('http://sep.ucas.ac.cn/')
+        data={
+            'userName':'xxxxxx',
+            'pwd':'xxxxxx',
+            'sb':'sb'
+        }
+        page2=mc.post('http://sep.ucas.ac.cn/slogin',paras=data,html_flag=True)
+        #print page2
     except Exception, e:
         #raise e
         traceback.print_exc()  
+   
+    
    
     
    
