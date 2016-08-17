@@ -16,7 +16,8 @@ sys.setdefaultencoding('utf8')
 class UrllibCrawler(object):
 
     def __init__(self, headers = {},debug = True, p = ''):
-
+        #timeout 
+        self.timeout=5
         #cookie handler
         self.cookie_processor = urllib2.HTTPCookieProcessor(cookielib.LWPCookieJar())
       
@@ -70,6 +71,7 @@ class UrllibCrawler(object):
             cur+=1
         return -1
 
+    #get
     def get(self, url, paras = {}, html_flag = False):
         html = ''
         for key in paras.keys():
@@ -78,7 +80,7 @@ class UrllibCrawler(object):
             url = url[0:-1]
         try:
             print url
-            resp = self.opener.open(url)
+            resp = self.opener.open(url,timeout=self.timeout)
             if html_flag:
                 html = resp.read()
         except Exception, e:
@@ -94,7 +96,7 @@ class UrllibCrawler(object):
         datas = urllib.urlencode(paras)  
         try:
             print url
-            resp = self.opener.open(req, datas)
+            resp = self.opener.open(req, datas,timeout=self.timeout)
             if html_flag:
                 html = resp.read()
         except Exception, e:
@@ -110,7 +112,7 @@ if __name__ == '__main__':
         headers={
             'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0',
         }
-        mc = UrllibCrawler(debug=True,p='127.0.0.1:8080')
+        mc = UrllibCrawler(debug=True)
         mc.add_header(headers)
         
         page1=mc.get('http://sep.ucas.ac.cn/',html_flag=True)

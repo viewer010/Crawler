@@ -17,6 +17,7 @@ class RequestsCrawler(object):
         self._allow_redirects=True
         self._verify=True
         self.debug=debug
+        self.timeout=5
         self.headers={
             'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0',
         }
@@ -47,14 +48,14 @@ class RequestsCrawler(object):
                 'http':p,
                 'https':p
             }
-        
+    #get
     def get(self, url, paras = {}, html_flag = False):
         ret = ''
         try:
             print 'get : '+url,
             req = requests.Request('GET', url,params=paras,headers=self.headers)
             prepped=self.s.prepare_request(req)
-            r=self.s.send(prepped, proxies=self.proxies,allow_redirects=self._allow_redirects,verify=self._verify)
+            r=self.s.send(prepped, proxies=self.proxies,allow_redirects=self._allow_redirects,verify=self._verify,timeout=self.timeout)
             if self.debug:
                 print ''
                 if len(r.history)!=0:
@@ -97,7 +98,7 @@ class RequestsCrawler(object):
 
             req = requests.Request('POST', url,data=paras,headers=self.headers)
             prepped=self.s.prepare_request(req)
-            r=self.s.send(prepped, proxies=self.proxies,allow_redirects=self._allow_redirects,verify=self._verify)
+            r=self.s.send(prepped, proxies=self.proxies,allow_redirects=self._allow_redirects,verify=self._verify,timeout=self.timeout)
             if self.debug:
                 print ''
                 if len(r.history)!=0:
@@ -137,7 +138,7 @@ if __name__ == '__main__':
         }
         mc = RequestsCrawler(debug=False)
         mc.add_header(headers)
-        mc.set_proxy('127.0.0.1:8080')
+        #mc.set_proxy('127.0.0.1:8080')
         mc.set_debug(True)
         page1=mc.get('http://sep.ucas.ac.cn/',html_flag=True)
         #print page1
